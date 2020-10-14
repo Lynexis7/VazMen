@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+.mat-form-field-underline {
+    background-color: #BD1515;
+}
+
+.mat-form-field-empty.mat-form-field-label{
+    color: #BD1515;
+}
+
+.mat-tab-label {
+    color: #BD1515;
+}
+
+.mat-ink-bar {
+    background-color: #BD1515;
+}
+
+.mat-card-header-text {
+    width: 100%;
+}
+
+.mat-progress-bar-buffer {
+    border: #BD1515;
+}
+
+.mat-tab-body-wrapper {
+    height: 400px;
+}
+
+.mat-ink-bar {
+    background-color:  #BD1515 !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

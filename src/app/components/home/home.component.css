@@ -1,0 +1,253 @@
+body, html {
+    overflow-x: hidden;
+    height: 100%;
+    opacity: 1;
+    background-image: url('../../../assets/fruits-vegetables.jpg') !important;
+}
+
+.main .row{
+  padding: 0;
+  margin: 0;
+}
+
+.navbar {
+  padding: 0;
+  display: block;
+}
+
+.navbar-nav {
+  width: 100%;
+}
+
+.main {
+  background-image: url('../../../assets/fruits-vegetables.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.30;
+  background-position: center;
+}
+
+.container {
+  margin-left: 0px;
+  margin-right: 0px;
+  max-width: 100%;
+}
+
+a:hover, a:active {
+  color: black !important;
+}
+
+.navbar-brand {
+  background: url('../../../assets/VazMen.png');
+  background-size: 200px;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 200px;
+  border-radius: 0%;
+  border-color: black;
+}
+
+.sidebutton:hover, .sidebutton:focus-within{
+  background-color: #e75e4c;
+  border:none;
+}
+
+.sidebutton {
+  font-weight: medium;
+  font-size: 17px;
+  height: 80px;
+  text-align: center;
+  vertical-align: -webkit-baseline-middle;
+}
+
+.panel-header {
+  background-color: white;
+  color: #0B6407;
+  max-width: 100%;
+  font-size: small;
+}
+
+.panel-header:hover, .panel-header:focus-within{
+  background-color: #61AC51;
+  color: white;
+}
+
+.logoutbtn {
+  color: #0B6407!important;
+  background-color: white;
+  outline: none;
+}
+
+.logoutbtn:hover, .logoutbtn:active {
+  color: #0B6407;
+  background-color: white;
+}
+
+button {
+  color: white !important;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+button:hover, button:active {
+  color: black !important;
+  border:none;
+}
+
+.user {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+::ng-deep .mat-menu-panel {
+  padding: 0 10px!important;
+  width: 100%!important;
+  z-index: 1050;
+}
+
+/*Remove rounded coners*/
+
+nav.sidebar.navbar {
+  border-radius: 0px;
+  border: none;
+  background: black;
+  width: 180px;
+}
+
+nav.sidebar, .main{
+  -webkit-transition: margin 200ms ease-out;
+  -moz-transition: margin 200ms ease-out;
+  -o-transition: margin 200ms ease-out;
+  transition: margin 200ms ease-out;
+}
+
+/* .....NavBar: Icon only with coloring/layout.....*/
+
+/*small/medium side display*/
+@media (min-width: 768px) {
+
+  /*Allow main to be next to Nav*/
+  .main{
+      position: absolute;
+      width: calc(100% - 40px); /*keeps 100% minus nav size*/
+      margin-left: 40px;
+      float: right;
+  }
+
+  /*lets nav bar to be showed on mouseover*/
+  nav.sidebar:hover + .main{
+      margin-left: 120px;
+  }
+
+  /*Center Brand*/
+  nav.sidebar.navbar.sidebar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+      margin-left: 0px;
+  }
+  /*Center Brand*/
+  nav.sidebar .navbar-brand, nav.sidebar .navbar-header{
+      text-align: center;
+      width: 100%;
+      margin-left: 0px;
+  }
+
+  /*Center Icons*/
+  nav.sidebar a{
+      padding-right: 13px;
+  }
+
+  /*adds border top to first nav box */
+  nav.sidebar .navbar-nav > li:first-child{
+      border-top: 1px #e5e5e5 solid;
+  }
+
+  /*adds border to bottom nav boxes*/
+  nav.sidebar .navbar-nav > li{
+      border-bottom: 1px #e5e5e5 solid;
+  }
+
+  /* Colors/style dropdown box*/
+  nav.sidebar .navbar-nav .open .dropdown-menu {
+      position: static;
+      float: none;
+      width: auto;
+      margin-top: 0;
+      background-color: transparent;
+      border: 0;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+  }
+
+  /*allows nav box to use 100% width*/
+  nav.sidebar .navbar-collapse, nav.sidebar .container-fluid{
+      padding: 0 0px 0 0px;
+  }
+
+  /*colors dropdown box text */
+  .navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+      color: #61AC51;
+  }
+
+  /*gives sidebar width/height*/
+  nav.sidebar{
+      width: 150px;
+      height: 100vh;
+      margin-left: -160px;
+      float: left;
+      z-index: 1000;
+      margin-bottom: 0px;
+      background-color: white;
+      box-shadow: 0 0 2.5rem rgba(85, 85, 85, 3.5);
+  }
+
+  /*give sidebar 100% width;*/
+  nav.sidebar li {
+      width: 100%;
+      height: 80px;
+  }
+
+  /* Move nav to full on mouse over*/
+  nav.sidebar:hover{
+      margin-left: 0px;
+  }
+  /*for hiden things when navbar hidden*/
+  .forAnimate{
+      opacity: 0;
+  }
+}
+
+/* .....NavBar: Fully showing nav bar..... */
+
+@media (min-width: 1030px) {
+
+  /*Allow main to be next to Nav*/
+  .main{
+      width: calc(100% - 200px); /*keeps 100% minus nav size*/
+      margin-left: 120px;
+  }
+
+  /*Show all nav*/
+  nav.sidebar{
+      margin-left: 0px;
+      float: left;
+  }
+  /*Show hidden items on nav*/
+  nav.sidebar .forAnimate{
+      opacity: 1;
+  }
+}
+
+nav.sidebar .navbar-nav .open .dropdown-menu>li>button:hover, nav.sidebar .navbar-nav .open .dropdown-menu>li>button:focus {
+  color: #ffffff;
+  background-color: transparent;
+}
+
+nav:hover .forAnimate{
+  opacity: 1;
+}
+section{
+  padding-left: 15px;
+}

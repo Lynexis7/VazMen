@@ -1,0 +1,85 @@
+.example-card {
+    box-shadow: 0 0 5.5rem rgba(55, 55, 55, 1.5);
+    background: white;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+}
+
+.row {
+    height: 100%;
+}
+
+
+.center-content {
+    text-align: -webkit-center;
+    align-self: center;
+    margin: auto;
+    height: 100%;
+    background-image: url('../assets/fondo_vazmen.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 80%;
+    font-size: large;
+}
+
+.mat-title {
+    margin: auto;
+    font-size: xx-large;
+    font-weight: bold;
+    padding-left: 40px;
+    color: #BD1515;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn {
+    background-color: #BD1515;
+    color: white;
+    margin-bottom: 5%;
+    width: 50%;
+    font-size: medium;
+    height: 50px;
+}
+
+.mat-input-element {
+    caret-color: #BD1515;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #BD1515 !important;
+    font-size: medium;
+}
+
+::ng-deep.mat-form-field-underline {
+    /*change color of underline*/
+    background-color: #BD1515 !important;
+  } 
+  
+  ::ng-deep.mat-form-field-ripple {
+   /*change color of underline when focused*/
+   background-color: #BD1515 !important;;
+  }
+
+  ::ng-deep.mat-progress-bar-fill::after{
+    background-color: #e99494 !important;
+  }
+  ::ng-deep.mat-progress-bar-buffer {
+    background: #BD1515 !important;
+  }
+img {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}

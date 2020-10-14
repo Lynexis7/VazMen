@@ -1,0 +1,159 @@
+<nav class="navbar navbar-inverse sidebar" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="sidebar">
+                <span class="sr-only">Toggle</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" routerLink="/home"></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="sidebar">
+            <ul class="nav navbar-nav text-center">
+                <button mat-flat-button class="sidebutton" routerLink="/ventas">
+                    <mat-icon style="font-size: 40px;; position: fixed; left: 0;">attach_money</mat-icon>
+                    <span style="margin-left: 10px">Ventas</span>
+                </button>
+
+                <button mat-flat-button class="sidebutton" routerLink="/gastos">
+                    <mat-icon style="font-size: 40px; position: fixed; left: 0;">account_balance_wallet</mat-icon>
+                    <span style="margin-left: 10px"> Gastos</span>
+                </button>
+
+                <button mat-flat-button class="sidebutton" routerLink="/proveedores">
+                    <mat-icon style="font-size: 40px; position: fixed; left: 0;">shopping_cart</mat-icon>
+                    <span style="margin-left: 10px">Proveedores</span>
+                </button>
+
+                <button mat-flat-button class="sidebutton" routerLink="/inventario">
+                    <svg style="position: fixed; left: 0; margin-left:3px" width="2em" height="2em" viewBox="0 0 16 16"
+                        class="bi bi-inboxes-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M4.98 1a.5.5 0 0 0-.39.188L1.54 5H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0A.5.5 0 0 1 10 5h4.46l-3.05-3.812A.5.5 0 0 0 11.02 1H4.98zM3.81.563A1.5 1.5 0 0 1 4.98 0h6.04a1.5 1.5 0 0 1 1.17.563l3.7 4.625a.5.5 0 0 1 .106.374l-.39 3.124A1.5 1.5 0 0 1 14.117 10H1.883A1.5 1.5 0 0 1 .394 8.686l-.39-3.124a.5.5 0 0 1 .106-.374L3.81.563zM.125 11.17A.5.5 0 0 1 .5 11H6a.5.5 0 0 1 .5.5 1.5 1.5 0 0 0 3 0 .5.5 0 0 1 .5-.5h5.5a.5.5 0 0 1 .496.562l-.39 3.124A1.5 1.5 0 0 1 14.117 16H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .121-.393z" />
+                    </svg>
+                    <span style="margin-left: 10px"> Inventario</span>
+                </button>
+
+                <button mat-flat-button class="sidebutton" routerLink="/estadisticas">
+                    <mat-icon style="font-size: 40px; position: fixed; left: 0;">bar_chart</mat-icon>
+                    <span style="margin-left: 10px">Estadísticas</span>
+                </button>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="main">
+
+    <div class="container">
+        <div class="row">
+            <h1 style="font-weight: bold; color: #9e1313; font-size: x-large;">Proveedores</h1>
+        </div>
+        <div class="row">
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-subtitle style="margin-top:10px;">En esta ventana se generarán los gastos
+                        correspondientes.</mat-card-subtitle>
+                </mat-card-header>
+
+                <div class="row mt-5 text-center">
+                    <form [formGroup]="proveedoresForm" style="width: 100%;">
+                        <div class="col-md-5 mt-5">
+                            <mat-form-field appearance="outline" style="width: 100%; font-size:medium">
+                                <mat-label>Proveedor</mat-label>
+                                <mat-select formControlName="Proveedor">
+                                    <mat-option *ngFor="let p of proveedores" [value]="p.Nombre"
+                                        style="color: #9e1313;">
+                                        {{p.Nombre}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="example-full-width" style="margin-top:12px">
+                                <mat-label>Salida:
+                                </mat-label>
+                                <input type="text" formControlName="Salida" style="font-size:large; font-weight: bold;"
+                                    matInput>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="example-full-width mt-1">
+                                <mat-label>Procedencia:</mat-label>
+                                <input type="text" formControlName="Procedencia"
+                                    style="font-size:large; font-weight: bold;" matInput>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="example-full-width mt-1">
+                                <mat-label>Remisión:</mat-label>
+                                <input type="text" formControlName="Remision"
+                                    style="font-size:large; font-weight: bold;" matInput placeholder="Ej. fianas...">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-5 text-center" style="padding-left: 100px">
+                            <mat-form-field appearance="outline" style="width: 100%; margin-top: 7%">
+                                <mat-label>Fecha llegada</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="Fecha">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                            <div class="row">
+                                <div class="col-md">
+                                    <mat-form-field class="example-full-width mt-1">
+                                        <mat-label>KGs Embasado:</mat-label>
+                                        <input type="number" formControlName="PesoEmbasado"
+                                            style="font-size:large; font-weight: bold;" matInput>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-full-width mt-1">
+                                        <mat-label>Arpillas:</mat-label>
+                                        <input type="number" formControlName="Arpillas"
+                                            style="font-size:large; font-weight: bold;" matInput>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-full-width mt-1">
+                                        <mat-label>KGs/ARP.</mat-label>
+                                        <input type="number" formControlName="PesoArp"
+                                            style="font-size:large; font-weight: bold;" matInput>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md">
+                                    <mat-form-field class="example-full-width mt-1">
+                                        <mat-label>KGs REC.</mat-label>
+                                        <input type="number" formControlName="PesoRec"
+                                            style="font-size:large; font-weight: bold;" matInput>
+                                    </mat-form-field>
+                                    <mat-form-field class="example-full-width mt-1">
+                                        <mat-label>Merma</mat-label>
+                                        <input type="number" formControlName="Merma"
+                                            style="font-size:large; font-weight: bold;" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <button mat-flat-button class="btn" style="margin-top: 15%;" (click)="onSubmit()">
+                                <mat-icon>attach_money</mat-icon>
+                                Generar gasto
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <mat-card-content>
+
+                </mat-card-content>
+                <mat-card-actions>
+
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+
+</div>
+
+<simple-notifications></simple-notifications>
