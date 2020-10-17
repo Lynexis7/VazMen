@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { NotificationsService } from 'angular2-notifications';
 import { InventarioService } from 'src/app/services/inventario.service';
 
 @Component({
@@ -10,8 +12,12 @@ import { InventarioService } from 'src/app/services/inventario.service';
 export class InventarioComponent implements OnInit {
 
   inventario: any;
+  inventarioForm =  new FormGroup({
+    Variedad: new FormControl('', Validators.required),
+    Cantidad: new FormControl('', Validators.required)
+  });
 
-  constructor(public inventarioService: InventarioService, public dialog: MatDialog) { }
+  constructor(public inventarioService: InventarioService, public noti: NotificationsService) { }
 
   ngOnInit(): void {
 
@@ -30,14 +36,12 @@ export class InventarioComponent implements OnInit {
 
   }
 
-  openDialog() {
-    this.dialog.open(InventarioDialog);
+  onSubmit(){
+    this.inventarioService.agregarProducto(this.inventarioForm.value);
+    this.inventarioForm.reset();
+    this.noti.success('¡Éxito!', 'El registro de inventario se ha generado exitosamente',
+            { position: ['bottom', 'right'], timeOut: 5000, animate: 'fade', showProgressBar: true });
   }
 
 }
 
-@Component({
-  selector: 'inventario-dialog',
-  templateUrl: 'inventario-dialog.html',
-})
-export class InventarioDialog {}

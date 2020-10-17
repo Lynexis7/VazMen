@@ -15,7 +15,6 @@ export class InventarioService {
   agregarProducto(prod){
     this.firestore.doc('Inventario/' + prod.Variedad).set({
       Variedad: prod.Variedad,
-      Calidad: prod.Calidad,
       Cantidad: prod.Cantidad
     });
   }

@@ -35,11 +35,6 @@
                     </svg>
                     <span style="margin-left: 10px"> Inventario</span>
                 </button>
-
-                <button mat-flat-button class="sidebutton" routerLink="/estadisticas">
-                    <mat-icon style="font-size: 40px; position: fixed; left: 0;">bar_chart</mat-icon>
-                    <span style="margin-left: 10px">Estadísticas</span>
-                </button>
             </ul>
         </div>
     </div>
@@ -71,11 +66,15 @@
                             </mat-form-field>
 
                             <mat-form-field class="example-full-width mt-3">
-                                <mat-label>Cantidad</mat-label>
+                                <mat-label>Costo</mat-label>
                                 <input type="number" formControlName="Cantidad"
                                     style="font-size:large; font-weight: bold;" matInput placeholder="$0.00">
                             </mat-form-field>
-                            <br>
+                            
+                            <button mat-flat-button class="btn" style="margin-top: 15%; height: 70px" (click)="onSubmit()" [disabled]="!gastosForm.valid">
+                                <mat-icon>attach_money</mat-icon>
+                                Generar gasto
+                            </button>
                         </div>
 
                         <div class="col-md-1" style="height: 300px;">
@@ -86,10 +85,24 @@
 
 
                         <div class="col-md-5 text-center" style="padding-left: 100px">
-                            <button mat-flat-button class="btn" style="margin-top: 15%; height: 70px" (click)="onSubmit()">
-                                <mat-icon>attach_money</mat-icon>
-                                Generar gasto
-                            </button>
+                            <div class="table-responsive table-borderless">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Nombre de Gasto</th>
+                                            <th>Costo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-body">
+                                        <tr class="cell-1" data-toggle="collapse" data-target="#demo" *ngFor="let g of gastos">
+                                            <td>{{g.Fecha}}</td>
+                                            <td>{{g.Nombre}}</td>
+                                            <td>{{g.Cantidad | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </form>
 

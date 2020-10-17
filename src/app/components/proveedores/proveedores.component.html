@@ -35,17 +35,12 @@
                     </svg>
                     <span style="margin-left: 10px"> Inventario</span>
                 </button>
-
-                <button mat-flat-button class="sidebutton" routerLink="/estadisticas">
-                    <mat-icon style="font-size: 40px; position: fixed; left: 0;">bar_chart</mat-icon>
-                    <span style="margin-left: 10px">Estadísticas</span>
-                </button>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="main">
+<div class="main" id="proveedores">
 
     <div class="container">
         <div class="row">
@@ -55,8 +50,8 @@
             <mat-card class="example-card">
                 <mat-card-header>
                     <div mat-card-avatar class="example-header-image"></div>
-                    <mat-card-subtitle style="margin-top:10px;">En esta ventana se generarán los gastos
-                        correspondientes.</mat-card-subtitle>
+                    <mat-card-subtitle style="margin-top:10px;">En esta ventana se generarán los procedimientos
+                        correspondientes a un proveedor.</mat-card-subtitle>
                 </mat-card-header>
 
                 <div class="row mt-5 text-center">
@@ -86,10 +81,17 @@
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" class="example-full-width mt-1">
+                                <mat-label>Variedad:</mat-label>
+                                <input type="text" formControlName="Variedad"
+                                    style="font-size:large; font-weight: bold;" matInput>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="example-full-width mt-1">
                                 <mat-label>Remisión:</mat-label>
-                                <input type="text" formControlName="Remision"
+                                <input type="number" formControlName="Remision"
                                     style="font-size:large; font-weight: bold;" matInput placeholder="Ej. fianas...">
                             </mat-form-field>
+
                         </div>
 
                         <div class="col-md-5 text-center" style="padding-left: 100px">
@@ -109,39 +111,328 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="example-full-width mt-1">
-                                        <mat-label>Arpillas:</mat-label>
-                                        <input type="number" formControlName="Arpillas"
+                                        <mat-label>KGs REC.</mat-label>
+                                        <input type="number" formControlName="PesoRec" (keyup)="calcularKGArp($event)"
                                             style="font-size:large; font-weight: bold;" matInput>
                                     </mat-form-field>
 
-                                    <mat-form-field class="example-full-width mt-1">
-                                        <mat-label>KGs/ARP.</mat-label>
-                                        <input type="number" formControlName="PesoArp"
-                                            style="font-size:large; font-weight: bold;" matInput>
-                                    </mat-form-field>
+                                    <label style="margin-top: 5%">KGs/ARP.</label>
+                                    <p style="font-size: xx-large; font-weight: bold;">{{kgsArp | number}}</p>
                                 </div>
 
                                 <div class="col-md">
                                     <mat-form-field class="example-full-width mt-1">
-                                        <mat-label>KGs REC.</mat-label>
-                                        <input type="number" formControlName="PesoRec"
+                                        <mat-label>Arpillas:</mat-label>
+                                        <input type="number" formControlName="Arpillas" (keyup)="calcularKGArp($event)"
                                             style="font-size:large; font-weight: bold;" matInput>
                                     </mat-form-field>
+                                    
                                     <mat-form-field class="example-full-width mt-1">
                                         <mat-label>Merma</mat-label>
                                         <input type="number" formControlName="Merma"
                                             style="font-size:large; font-weight: bold;" matInput>
                                     </mat-form-field>
                                 </div>
+
                             </div>
 
-                            <button mat-flat-button class="btn" style="margin-top: 15%;" (click)="onSubmit()">
-                                <mat-icon>attach_money</mat-icon>
-                                Generar gasto
+                            <button mat-flat-button class="btn" style="margin-top: 15%;" (click)="onSubmit()" [disabled]="!proveedoresForm.valid">
+                                <mat-icon>person_add</mat-icon>
+                                Generar
                             </button>
                         </div>
+
                     </form>
 
+                </div>
+
+                <div class="row">
+                    <form [formGroup]="tablaForm">
+                        <div class="container mt-5">
+                            <div class="d-flex justify-content-center row">
+                                <div class="col-md-12">
+                                    <div class="rounded">
+                                        <div class="table-responsive table-borderless">
+                                            <table class="table" >
+                                                <thead>
+                                                    <tr>
+                                                        <th>Calidad</th>
+                                                        <th>N° Bultos</th>
+                                                        <th>KGs. Recibidos</th>
+                                                        <th>Desc. de KGs por bulto</th>
+                                                        <th>Total KGs Descontados</th>
+                                                        <th>Total KGs Netos</th>
+                                                        <th>Precio</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="table-body">
+                                                    <tr>
+                                                        <td>1era</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultos1"
+                                                                    (keyup)="calculoTabla($event)" style="font-size:medium;"
+                                                                    matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibido | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMerma | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDesc | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNeto | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{total | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2nda</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultos2"
+                                                                    (keyup)="calculoTabla2($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibido2 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMerma2 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDesc2 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNeto2 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio2($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{total2 | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3era</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultos3"
+                                                                    (keyup)="calculoTabla3($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibido3 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMerma3 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDesc3 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNeto3 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio3($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{total3 | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>4ta</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultos4"
+                                                                    (keyup)="calculoTabla4($event)" style="font-size:medium;"
+                                                                    matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibido4 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMerma4 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDesc4 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNeto4 | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{total4 | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>MIXTA</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultosM"
+                                                                    (keyup)="calculoTablaMixta($event)" style="font-size:medium;"
+                                                                    matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibidoM | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMermaM | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDescM | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNetoM | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{totalM | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>MONOS</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultosMono"
+                                                                    (keyup)="calculoTablaMono($event)" style="font-size:medium;"
+                                                                    matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibidoMono | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMermaMono | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDescMono | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNetoMono | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio($event)"
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{totalMono | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>OTROS</td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" formControlName="NoBultosO"
+                                                                    (keyup)="calculoTablaOtros($event)" style="font-size:medium;"
+                                                                    matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{kgsRecibidoO | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{DescMermaO | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsDescO | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: medium; font-weight: bold;">
+                                                                {{totalKgsNetoO | number}}</p>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <mat-form-field style="width: 60px; height: 10px;">
+                                                                <input type="number" (keyup)="getPrecio($event)" 
+                                                                    style="font-size:medium;" matInput>
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td style="vertical-align: middle;">
+                                                            <p style="font-size: large; font-weight: bold;">
+                                                                {{totalO | currency}}</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <td colspan="7"></td>
+                                                    <p style="font-size: large; font-weight: bold;">Total:
+                                                        <br>
+                                                        {{totalGeneral | currency}}</p>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 <mat-card-content>

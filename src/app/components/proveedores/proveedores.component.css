@@ -110,6 +110,7 @@ nav.sidebar.navbar {
   border: none;
   background: black;
   width: 180px;
+  position: fixed;
 }
 
 nav.sidebar, .main{
@@ -252,7 +253,7 @@ section{
 }
   
 .example-header-image {
-    background-image: url('../../../assets/verduras.jpg');
+    background-image: url('../../../assets/proveedor.jpg');
     background-size: cover;
 }
 

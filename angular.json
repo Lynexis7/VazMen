@@ -28,9 +28,11 @@
               "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js", 
-              "node_modules/bootstrap/dist/js/bootstrap.min.js",  
-              "node_modules/popper.js/dist/umd/popper.min.js"]
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -126,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "VazMen"
+  "defaultProject": "VazMen",
+  "cli": {
+    "analytics": "3c0c423e-a150-4913-8d38-732d73709e24"
+  }
 }

@@ -110,6 +110,7 @@ nav.sidebar.navbar {
   border: none;
   background: black;
   width: 180px;
+  position: fixed;
 }
 
 nav.sidebar, .main{

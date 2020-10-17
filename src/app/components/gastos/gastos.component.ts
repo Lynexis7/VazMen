@@ -17,10 +17,22 @@ export class GastosComponent implements OnInit {
   dia: number = new Date().getDate();
   mes: number = new Date().getMonth();
   año: number = new Date().getFullYear();
+  gastos: any;
 
   constructor(public gastosService: GastosService, public noti: NotificationsService) { }
 
   ngOnInit(): void {
+    this.gastosService.obtenerGastos().subscribe(data => {
+      if(data){
+        this.gastos = data.map(e => {
+          return {
+            Fecha: e.payload.doc.data()['Dia'] + "/" + e.payload.doc.data()['Mes'] + "/" + e.payload.doc.data()['Año'],
+            Nombre: e.payload.doc.data()['Nombre'],
+            Cantidad: e.payload.doc.data()['Cantidad']
+          }
+        })
+      }
+    })
   }
 
   onSubmit() {

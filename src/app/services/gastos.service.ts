@@ -11,4 +11,8 @@ export class GastosService {
   insertarGasto(gasto){
     this.firestore.collection('Gastos').add(gasto);
   }
+
+  obtenerGastos(){
+    return this.firestore.collection('Gastos').snapshotChanges();
+  }
 }
