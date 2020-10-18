@@ -27,7 +27,7 @@ export class ProveedoresService {
         console.log(cantidad)
       }
       
-      this.inventario.Cantidad = this.inventario.Cantidad - inv['Cantidad'];
+      this.inventario.Cantidad = this.inventario.Cantidad + inv['Cantidad'];
       console.log(this.inventario.Cantidad)
       this.cont++;
       if(this.cont == 1){

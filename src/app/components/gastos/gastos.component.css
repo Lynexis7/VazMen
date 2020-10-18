@@ -249,7 +249,7 @@ section{
 
 .example-card {
     width: 95%;
-    height: 500px;
+    height: 100%;
     animation: card 1.5s;
 }
   

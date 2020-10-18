@@ -45,7 +45,7 @@ export class VentasComponent implements OnInit {
             Fecha: e.payload.doc.data()['Dia'] + "/" + e.payload.doc.data()['Mes'] + "/" + e.payload.doc.data()['Año'],
             Producto: e.payload.doc.data()['Variedad'],
             Cantidad: e.payload.doc.data()['Cantidad'],
-            Total: e.payload.doc.data()['Total']
+            Total: e.payload.doc.data()['totalVenta']
           }
         });
       }
@@ -69,6 +69,9 @@ export class VentasComponent implements OnInit {
           this.ventasForm.value.Año = this.año;
           if (this.ventasForm.value.Pendiente != true) {
             this.ventasForm.value.Pendiente = false;
+          } else if(this.ventasForm.value.Pendiente == true){
+            this.ventasForm.value.Saldo = this.ventasForm.value.totalVenta;
+            this.ventasForm.value.totalVenta = 0;
           }
           cont++;
           if(cont == 1){
