@@ -15,7 +15,7 @@ export class ProveedoresService {
     return this.firestore.collection('Proveedores').snapshotChanges();
   }
 
-  restarInventario(inv){
+  agregarInventario(inv){
     this.cont = 0;
     let variedad = inv['Variedad'] + " " + inv['Calidad'];
     console.log(variedad)
@@ -34,5 +34,9 @@ export class ProveedoresService {
         this.firestore.doc('Inventario/' + variedad).update({ 'Cantidad': this.inventario.Cantidad });
       }
     });
+  }
+
+  getUsuarios(){
+    return this.firestore.collection('Usuarios').snapshotChanges();
   }
 }

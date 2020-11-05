@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-proveedores',
@@ -14,12 +16,13 @@ export class ProveedoresComponent implements OnInit {
   proveedores: any;
   proveedoresForm = new FormGroup({
     Proveedor: new FormControl('', Validators.required),
-    Salida: new FormControl('', Validators.required),
+    CajasEntregadas: new FormControl('', Validators.required),
     Procedencia: new FormControl('', Validators.required),
     Variedad: new FormControl('', Validators.required),
     Remision: new FormControl('', Validators.required),
     PesoEmbasado: new FormControl('', Validators.required),
     Arpillas: new FormControl('', Validators.required),
+    Cajas: new FormControl('', Validators.required),
     Fecha: new FormControl(new Date(), Validators.required),
     PesoRec: new FormControl(new Date(), Validators.required),
     Merma: new FormControl(new Date(), Validators.required)
@@ -44,7 +47,7 @@ export class ProveedoresComponent implements OnInit {
   totalKgsNeto: number = 0;
   precio: number = 0;
   kgsRecibido2: number = 0;
-  DescMerma2: any= 0;
+  DescMerma2: any = 0;
   totalKgsDesc2: number = 0;
   totalKgsNeto2: number = 0;
   kgsRecibido3: number = 0;
@@ -74,11 +77,14 @@ export class ProveedoresComponent implements OnInit {
   totalMono: number = 0;
   totalO: number = 0;
   totalGeneral: number = 0;
-  constructor(public proveedoresService: ProveedoresService) { }
+  usuarios: any;
+  admin: boolean;
+  tipo: any;
+  constructor(public proveedoresService: ProveedoresService, public auth: AuthService) { }
 
   ngOnInit(): void {
     this.proveedoresService.getProveedores().subscribe(data => {
-      if(data){
+      if (data) {
         this.proveedores = data.map(e => {
           return {
             Nombre: e.payload.doc.data()['Nombre']
@@ -87,75 +93,134 @@ export class ProveedoresComponent implements OnInit {
       }
     });
 
+    switch (this.auth.user) {
+      case "Ventas":
+        this.admin = true;
+        break;
+      case "Admin":
+        this.admin = false;
+        break;
+      default:
+        break;
+    }
+
   }
 
-  onSubmit(){
-    var data = document.getElementById('proveedores');
-    window.scrollTo(0,0);
+  onSubmit() {
+    let data = document.getElementById('proveedores');
+
+    window.scrollTo(0, 0);
     html2canvas(data).then(canvas => {
       // Few necessary setting options
-      var imgWidth = 208;   
-      var imgHeight = canvas.height * imgWidth / canvas.width;  
+      var imgWidth = 208;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
 
       const contentDataURL = canvas.toDataURL('image/png', 1.0);
-      var pdf = new jspdf('p', 'mm', 'a4');
+      var pdf = new jspdf('l', 'mm', 'a4');
 
       window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+
       pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save(`${this.proveedoresForm.controls.Proveedor.value}-reporte.pdf`); // Generated PDF
+
     });
 
-    if(this.tablaForm.controls.NoBultos1.value != undefined) {
+    /*let nombre = this.proveedoresForm.controls.Proveedor.value;
+
+    let printContents = document.getElementById('proveedores').innerHTML;
+    var data = `
+    <html>
+      <head>
+        <title>Proveedores</title>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+      </head>
+  <body onload="window.close()">
+    <div class="container" style="width:800; height=1500px;">
+      <div class="row">
+        <div class="col-md-4">
+          <img src="assets/Vazmen1.jfif" style="height: 20%; width: 20%">
+        </div>
+        <div class="col-md-6">
+          <h4 style="font-size: medium; font-weight: bold">Nombre: ${nombre}</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col" style="height:1500px; width: 800px;">
+        ${printContents}
+        </div>
+      </div>
+    </div>
+  </body>
+    </html>`;
+
+    var iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    setTimeout(function () {
+      var iframedoc = iframe.contentDocument || iframe.contentWindow.document;
+      iframedoc.body.innerHTML = data;
+      html2canvas(iframedoc.body).then(canvas => {
+        var imgWidth = 430;
+        var imgHeight = canvas.height * imgWidth / canvas.width;
+
+        const contentDataURL = canvas.toDataURL('image/png', 1.0);
+        var pdf = new jspdf('p', 'px', 'a4');
+
+        pdf.addImage(contentDataURL, 'PNG', 10, 10, imgWidth, imgHeight);
+        pdf.save(`Proveedor-${nombre}.pdf`);
+      })
+    }, 10);*/
+
+    /*if (this.tablaForm.controls.NoBultos1.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultos1.value;
       inv['Calidad'] = "1ra";
       console.log(inv)
-      this.proveedoresService.restarInventario(inv);
-    } else if(this.tablaForm.controls.NoBultos2.value != undefined) {
+      this.proveedoresService.agregarInventario(inv);
+    } else if (this.tablaForm.controls.NoBultos2.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultos2.value;
       inv['Calidad'] = "2nda";
-      this.proveedoresService.restarInventario(inv);
-    } else if(this.tablaForm.controls.NoBultos3.value != undefined) {
+      this.proveedoresService.agregarInventario(inv);
+    } else if (this.tablaForm.controls.NoBultos3.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultos3.value;
       inv['Calidad'] = "3ra";
-      this.proveedoresService.restarInventario(inv);
-    } else if(this.tablaForm.controls.NoBultos4.value != undefined) {
+      this.proveedoresService.agregarInventario(inv);
+    } else if (this.tablaForm.controls.NoBultos4.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultos4.value;
       inv['Calidad'] = "4ta";
-      this.proveedoresService.restarInventario(inv);
-    } else if(this.tablaForm.controls.NoBultosM.value != undefined) {
+      this.proveedoresService.agregarInventario(inv);
+    } else if (this.tablaForm.controls.NoBultosM.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultosM.value;
       inv['Calidad'] = "4ta";
-      this.proveedoresService.restarInventario(inv);
-    } else if(this.tablaForm.controls.NoBultosMono.value != undefined) {
+      this.proveedoresService.agregarInventario(inv);
+    } else if (this.tablaForm.controls.NoBultosMono.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultosMono.value;
       inv['Calidad'] = "4ta";
-      this.proveedoresService.restarInventario(inv);
-    } else if(this.tablaForm.controls.NoBultosO.value != undefined) {
+      this.proveedoresService.agregarInventario(inv);
+    } else if (this.tablaForm.controls.NoBultosO.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultosO.value;
       inv['Calidad'] = "4ta";
-      this.proveedoresService.restarInventario(inv);
-    }
+      this.proveedoresService.agregarInventario(inv);
+    }*/
   }
 
-  calcularKGArp(event){
+  calcularKGArp(event) {
     this.kgsArp = this.proveedoresForm.controls.PesoRec.value / event.target.value;
   }
 
-  calculoTabla(event){
+  calculoTabla(event) {
     console.log(event.target.value)
     this.kgsRecibido = this.kgsArp * event.target.value;
     this.DescMerma = this.proveedoresForm.controls.Merma.value;
@@ -164,7 +229,7 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  calculoTabla2(event){
+  calculoTabla2(event) {
     this.kgsRecibido2 = this.kgsArp * event.target.value;
     this.DescMerma2 = this.proveedoresForm.controls.Merma.value;
     this.totalKgsDesc2 = event.target.value * this.DescMerma2;
@@ -172,7 +237,7 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  calculoTabla3(event){
+  calculoTabla3(event) {
     this.kgsRecibido3 = this.kgsArp * event.target.value;
     this.DescMerma3 = this.proveedoresForm.controls.Merma.value;
     this.totalKgsDesc3 = event.target.value * this.DescMerma3;
@@ -180,7 +245,7 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  calculoTabla4(event){
+  calculoTabla4(event) {
     this.kgsRecibido4 = this.kgsArp * event.target.value;
     this.DescMerma4 = this.proveedoresForm.controls.Merma.value;
     this.totalKgsDesc4 = event.target.value * this.DescMerma4;
@@ -188,7 +253,7 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  calculoTablaMixta(event){
+  calculoTablaMixta(event) {
     this.kgsRecibidoM = this.kgsArp * event.target.value;
     this.DescMermaM = this.proveedoresForm.controls.Merma.value;
     this.totalKgsDescM = event.target.value * this.DescMermaM;
@@ -196,7 +261,7 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  calculoTablaMono(event){
+  calculoTablaMono(event) {
     this.kgsRecibidoMono = this.kgsArp * event.target.value;
     this.DescMermaMono = this.proveedoresForm.controls.Merma.value;
     this.totalKgsDescMono = event.target.value * this.DescMermaMono;
@@ -204,7 +269,7 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  calculoTablaOtros(event){
+  calculoTablaOtros(event) {
     this.kgsRecibidoO = this.kgsArp * event.target.value;
     this.DescMermaO = this.proveedoresForm.controls.Merma.value;
     this.totalKgsDescO = event.target.value * this.DescMermaO;
@@ -212,31 +277,31 @@ export class ProveedoresComponent implements OnInit {
     this.totalGeneral = this.total + this.total2 + this.total3 + this.total4 + this.totalM + this.totalMono + this.totalO;
   }
 
-  getPrecio(event){
+  getPrecio(event) {
     this.total = event.target.value * this.totalKgsNeto;
   }
 
-  getPrecio2(event){
+  getPrecio2(event) {
     this.total2 = event.target.value * this.totalKgsNeto2;
   }
 
-  getPrecio3(event){
+  getPrecio3(event) {
     this.total3 = event.target.value * this.totalKgsNeto3;
   }
 
-  getPrecio4(event){
+  getPrecio4(event) {
     this.total4 = event.target.value * this.totalKgsNeto4;
   }
 
-  getPrecioMixta(event){
+  getPrecioMixta(event) {
     this.totalM = event.target.value * this.totalKgsNetoM;
   }
 
-  getPrecioMono(event){
+  getPrecioMono(event) {
     this.totalMono = event.target.value * this.totalKgsNetoMono;
   }
 
-  getPrecioOtro(event){
+  getPrecioOtro(event) {
     this.totalO = event.target.value * this.totalKgsNetoO;
   }
 

@@ -47,4 +47,8 @@ export class VentasService {
   getVentasPendientes(){
     return this.firestore.collection('Ventas', ref => ref.where('Pendiente', '==', true)).snapshotChanges();
   }
+
+  getProveedores(){
+    return this.firestore.collection('Proveedores').snapshotChanges();
+  }
 }

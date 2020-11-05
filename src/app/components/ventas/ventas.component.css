@@ -103,6 +103,10 @@ button:hover, button:active {
   z-index: 1050;
 }
 
+.example-selected-value {
+  margin: 15px 0;
+}
+
 /*Remove rounded coners*/
 
 nav.sidebar.navbar {
@@ -249,7 +253,7 @@ section{
 
 .example-card {
     width: 95%;
-    height: 500px;
+    height: 100%;
     animation: card 1.5s;
 }
   

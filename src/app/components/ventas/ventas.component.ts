@@ -17,13 +17,15 @@ export class VentasComponent implements OnInit {
     Variedad: new FormControl('', Validators.required),
     Costo: new FormControl('', Validators.required),
     Cantidad: new FormControl('', Validators.required),
-    Pendiente: new FormControl(false, Validators.required)
+    Nombre: new FormControl('', Validators.required),
+    Proveedor: new FormControl('', Validators.required)
   });
   dia: number = new Date().getDate();
   mes: number = new Date().getMonth();
   año: number = new Date().getFullYear();
   flag: boolean = false;
   ventasPendientes: any;
+  proveedores: any;
 
   constructor(public ventasService: VentasService, public noti: NotificationsService) { }
 
@@ -36,6 +38,16 @@ export class VentasComponent implements OnInit {
           }
         });
       }
+
+      this.ventasService.getProveedores().subscribe(data => {
+        if(data){
+          this.proveedores = data.map(e => {
+            return {
+              Nombre: e.payload.doc.data()['Nombre']
+            }
+          });
+        }
+      });
     });
 
     this.ventasService.getVentasPendientes().subscribe(data => {
@@ -55,8 +67,8 @@ export class VentasComponent implements OnInit {
 
   onSubmit() {
     let cont = 0;
-    console.log(this.ventasForm.value);
     console.log(this.flag);
+    console.log(this.ventasForm.value);
     this.ventasService.getCantidad(this.ventasForm.value.Variedad).subscribe(data => {
       if (data) {
         if (this.ventasForm.value.Cantidad > data[0].payload.doc.data()['Cantidad']) {
@@ -67,12 +79,14 @@ export class VentasComponent implements OnInit {
           this.ventasForm.value.Dia = this.dia;
           this.ventasForm.value.Mes = this.mes + 1;
           this.ventasForm.value.Año = this.año;
-          if (this.ventasForm.value.Pendiente != true) {
-            this.ventasForm.value.Pendiente = false;
-          } else if(this.ventasForm.value.Pendiente == true){
+          if(this.ventasForm.value.Nombre == "" || this.ventasForm.value.Nombre == undefined){
             this.ventasForm.value.Saldo = this.ventasForm.value.totalVenta;
             this.ventasForm.value.totalVenta = 0;
+            this.ventasForm.value.Pendiente = false;
+          } else {
+            this.ventasForm.value.Pendiente = true;
           }
+          console.log(this.ventasForm.value);
           cont++;
           if(cont == 1){
             this.ventasService.generarVenta(this.ventasForm.value);
