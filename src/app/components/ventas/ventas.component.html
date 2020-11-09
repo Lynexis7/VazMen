@@ -194,6 +194,45 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="container mt-5">
+                            <h1 style="font-weight: bold; color: #9e1313; font-size: large; margin-left: 2%">Ventas del día</h1>
+                            <div class="d-flex justify-content-center row">
+                                <div class="col-md-12">
+                                    <div class="rounded">
+                                        <div class="table-responsive table-borderless">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Proveedor</th>
+                                                        <th>Variedad</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Estatus</th>
+                                                        <th>Total</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="table-body">
+                                                    <tr class="cell-1" data-toggle="collapse" data-target="#demo"
+                                                        *ngFor="let vd of ventasDia">
+                                                        <td>{{vd.Fecha}}</td>
+                                                        <td>{{vd.Proveedor}}</td>
+                                                        <td>{{vd.Variedad}}</td>
+                                                        <td>{{vd.Cantidad}} KG</td>
+                                                        <td><span class="badge badge-info">Hoy</span></td>
+                                                        <td>{{vd.Total | currency}}</td>
+                                                        <td class="table-elipse" data-toggle="collapse"
+                                                            data-target="#demo"><i
+                                                                class="fa fa-ellipsis-h text-black-50"></i></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </mat-tab>
                 </mat-tab-group>
 

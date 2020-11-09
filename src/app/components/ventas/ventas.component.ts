@@ -26,6 +26,7 @@ export class VentasComponent implements OnInit {
   flag: boolean = false;
   ventasPendientes: any;
   proveedores: any;
+  ventasDia: any;
 
   constructor(public ventasService: VentasService, public noti: NotificationsService) { }
 
@@ -61,7 +62,23 @@ export class VentasComponent implements OnInit {
           }
         });
       }
-    })
+    });
+
+    this.ventasService.getVentasDelDia().subscribe(data => {
+      if(data){
+        this.ventasDia = data.map(e => {
+          return {
+            Fecha: e.payload.doc.data()['Dia'] + "/" + e.payload.doc.data()['Mes'] + "/" + e.payload.doc.data()['Año'],
+            Proveedor: e.payload.doc.data()['Proveedor'], 
+            Variedad: e.payload.doc.data()['Variedad'],
+            Cantidad: e.payload.doc.data()['Cantidad'],
+            Total: e.payload.doc.data()['Saldo']
+          }
+        });
+
+        console.log(this.ventasDia)
+      }
+    });
 
   }
 

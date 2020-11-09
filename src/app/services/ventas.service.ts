@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Inventario } from '../models/inventario';
 import { Ventas } from '../models/ventas';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class VentasService {
 
   cont: any;
   inventario: Inventario = new Inventario();
+  datePipe: DatePipe = new DatePipe('en-US');
 
   constructor(public firestore: AngularFirestore) { }
 
@@ -46,6 +48,11 @@ export class VentasService {
 
   getVentasPendientes(){
     return this.firestore.collection('Ventas', ref => ref.where('Pendiente', '==', true)).snapshotChanges();
+  }
+
+  getVentasDelDia(){
+    let dia = new Date();
+    return this.firestore.collection('Ventas', ref => ref.where('Dia', '==', dia.getDate())).snapshotChanges();
   }
 
   getProveedores(){
