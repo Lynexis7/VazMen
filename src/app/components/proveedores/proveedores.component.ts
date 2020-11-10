@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import jspdf from 'jspdf';
@@ -80,7 +80,7 @@ export class ProveedoresComponent implements OnInit {
   usuarios: any;
   admin: boolean;
   tipo: any;
-  constructor(public proveedoresService: ProveedoresService, public auth: AuthService) { }
+  constructor(public proveedoresService: ProveedoresService, public auth: AuthService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.proveedoresService.getProveedores().subscribe(data => {
@@ -112,65 +112,20 @@ export class ProveedoresComponent implements OnInit {
     window.scrollTo(0, 0);
     html2canvas(data).then(canvas => {
       // Few necessary setting options
-      var imgWidth = 208;
+      var imgWidth = 240;
       var imgHeight = canvas.height * imgWidth / canvas.width;
 
       const contentDataURL = canvas.toDataURL('image/png', 1.0);
       var pdf = new jspdf('l', 'mm', 'a4');
 
       window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
-
+      
       pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save(`${this.proveedoresForm.controls.Proveedor.value}-reporte.pdf`); // Generated PDF
-
     });
 
-    /*let nombre = this.proveedoresForm.controls.Proveedor.value;
 
-    let printContents = document.getElementById('proveedores').innerHTML;
-    var data = `
-    <html>
-      <head>
-        <title>Proveedores</title>
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-      </head>
-  <body onload="window.close()">
-    <div class="container" style="width:800; height=1500px;">
-      <div class="row">
-        <div class="col-md-4">
-          <img src="assets/Vazmen1.jfif" style="height: 20%; width: 20%">
-        </div>
-        <div class="col-md-6">
-          <h4 style="font-size: medium; font-weight: bold">Nombre: ${nombre}</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col" style="height:1500px; width: 800px;">
-        ${printContents}
-        </div>
-      </div>
-    </div>
-  </body>
-    </html>`;
-
-    var iframe = document.createElement('iframe');
-    document.body.appendChild(iframe);
-    setTimeout(function () {
-      var iframedoc = iframe.contentDocument || iframe.contentWindow.document;
-      iframedoc.body.innerHTML = data;
-      html2canvas(iframedoc.body).then(canvas => {
-        var imgWidth = 430;
-        var imgHeight = canvas.height * imgWidth / canvas.width;
-
-        const contentDataURL = canvas.toDataURL('image/png', 1.0);
-        var pdf = new jspdf('p', 'px', 'a4');
-
-        pdf.addImage(contentDataURL, 'PNG', 10, 10, imgWidth, imgHeight);
-        pdf.save(`Proveedor-${nombre}.pdf`);
-      })
-    }, 10);*/
-
-    /*if (this.tablaForm.controls.NoBultos1.value != undefined) {
+    if (this.tablaForm.controls.NoBultos1.value != undefined) {
       let inv = {};
       inv['Variedad'] = this.proveedoresForm.controls.Variedad.value;
       inv['Cantidad'] = this.tablaForm.controls.NoBultos1.value;
@@ -213,7 +168,7 @@ export class ProveedoresComponent implements OnInit {
       inv['Cantidad'] = this.tablaForm.controls.NoBultosO.value;
       inv['Calidad'] = "4ta";
       this.proveedoresService.agregarInventario(inv);
-    }*/
+    }
   }
 
   calcularKGArp(event) {
