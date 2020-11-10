@@ -16,15 +16,15 @@ export class VentasService {
 
   constructor(public firestore: AngularFirestore) { }
 
-  getVariedad(){
+  getVariedad() {
     return this.firestore.collection('Inventario').snapshotChanges();
   }
 
-  getCantidad(variedad){
+  getCantidad(variedad) {
     return this.firestore.collection('Inventario', ref => ref.where('Variedad', '==', variedad)).snapshotChanges();
   }
 
-  generarVenta(venta: Ventas){
+  generarVenta(venta: Ventas) {
     this.firestore.collection('Ventas').add(venta);
     this.actualizarInventario(venta);
   }
@@ -40,22 +40,37 @@ export class VentasService {
       }
       this.inventario.Cantidad = this.inventario.Cantidad - venta.Cantidad;
       this.cont++;
-      if(this.cont == 1){
+      if (this.cont == 1) {
         this.firestore.doc('Inventario/' + venta['Variedad']).update({ 'Cantidad': this.inventario.Cantidad });
       }
     });
   }
 
-  getVentasPendientes(){
+  getVentasPendientes() {
     return this.firestore.collection('Ventas', ref => ref.where('Pendiente', '==', true)).snapshotChanges();
   }
 
-  getVentasDelDia(){
+  getVentasDelDia() {
     let dia = new Date();
     return this.firestore.collection('Ventas', ref => ref.where('Dia', '==', dia.getDate())).snapshotChanges();
   }
 
-  getProveedores(){
+  getProveedores() {
     return this.firestore.collection('Proveedores').snapshotChanges();
+  }
+
+  actualizarVentaPendiente(vp, id) {
+    
+    this.firestore.collection('Ventas').doc(id).set({
+      Año: vp.Año,
+      Mes: vp.Mes,
+      Dia: vp.Dia,
+      Nombre: "",
+      Pendiente: true,
+      Proveedor: vp.Proveedor,
+      Cantidad: vp.Cantidad,
+      Variedad: vp.Variedad,
+      totalVenta: vp.totalVenta
+    });
   }
 }

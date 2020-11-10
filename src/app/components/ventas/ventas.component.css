@@ -103,6 +103,10 @@ button:hover, button:active {
   z-index: 1050;
 }
 
+::ng-deep .mat-select{
+  height: 65px;
+}
+
 .example-selected-value {
   margin: 15px 0;
 }

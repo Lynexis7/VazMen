@@ -98,7 +98,8 @@
                                         </mat-button-toggle>
                                     </mat-button-toggle-group>
 
-                                    <mat-form-field appearance="outline" style="width: 100%; font-size:medium; margin-top: 5%">
+                                    <mat-form-field appearance="outline"
+                                        style="width: 100%; font-size:medium; margin-top: 5%">
                                         <mat-label>Proveedor</mat-label>
                                         <mat-select formControlName="Proveedor">
                                             <mat-option *ngFor="let p of proveedores" [value]="p.Nombre"
@@ -114,7 +115,7 @@
                                         <input type="text" formControlName="Nombre"
                                             style="font-size:large; font-weight: bold;" matInput>
                                     </mat-form-field>
-                                    
+
                                     <mat-form-field class="example-full-width" style="margin-top:12px">
                                         <mat-label>Costo por pieza
                                         </mat-label>
@@ -172,20 +173,72 @@
                                                         <th>Cantidad</th>
                                                         <th>Estatus</th>
                                                         <th>Total</th>
-                                                        <th></th>
+                                                        <th>Editar</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="table-body">
                                                     <tr class="cell-1" data-toggle="collapse" data-target="#demo"
                                                         *ngFor="let vp of ventasPendientes">
-                                                        <td>{{vp.Fecha}}</td>
-                                                        <td>{{vp.Producto}}</td>
-                                                        <td>{{vp.Cantidad}} KG</td>
-                                                        <td><span class="badge badge-danger">Pendiente</span></td>
-                                                        <td>{{vp.Total | currency}}</td>
-                                                        <td class="table-elipse" data-toggle="collapse"
-                                                            data-target="#demo"><i
-                                                                class="fa fa-ellipsis-h text-black-50"></i></td>
+                                                        <ng-container *ngIf="!vp.isEditable; else elseBlock">
+                                                            <td>{{vp.Fecha}}</td>
+                                                            <td>{{vp.Producto}}</td>
+                                                            <td>{{vp.Cantidad}} KG</td>
+                                                            <td><span class="badge badge-danger">Pendiente</span></td>
+                                                            <td>{{vp.Total | currency}}</td>
+                                                            <td>
+                                                                <a style="width:15px; height: 35px; cursor: pointer; color: black"
+                                                                    (click)="editVentaPendiente(vp)">
+                                                                    <mat-icon style="color: red">edit</mat-icon>
+                                                                </a>
+                                                            </td>
+                                                        </ng-container>
+
+                                                        <ng-template #elseBlock>
+                                                            <td style="width: 150px;">
+                                                                <mat-form-field appearance="fill" style="width:100%;">
+                                                                    <mat-label>Fecha</mat-label>
+                                                                    <input matInput [matDatepicker]="picker"
+                                                                        [(ngModel)]="vp.EditFecha">
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </td>
+                                                            <td style="width: 150px;">
+                                                                <mat-form-field appearance="outline"
+                                                                    style="width: 100%;">
+                                                                    <mat-label>Variedad:</mat-label>
+                                                                    <mat-select>
+                                                                        <mat-option *ngFor="let v of variedad"
+                                                                            [value]="v.Variedad">
+                                                                            {{v.Variedad}}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </td>
+                                                            <td>
+                                                                <mat-form-field appearance="outline"
+                                                                    style="max-width: 35%;">
+                                                                    <mat-label>Cantidad:</mat-label>
+                                                                    <input matInput type="number"
+                                                                        [(ngModel)]="vp.EditCantidad">
+                                                                </mat-form-field>
+                                                            </td>
+                                                            <td><span class="badge badge-danger">Pendiente</span></td>
+                                                            <td>{{vp.Total | currency}}</td>
+                                                            <td>
+                                                                <a class="btn btn-success btn-sm" style="height: 30px"
+                                                                    (click)="actualizarVentaPendiente(vp)">
+                                                                    <mat-icon>check</mat-icon>
+                                                                </a>
+
+                                                                <a class="btn btn-danger btn-sm" style="height: 30px"
+                                                                    (click)="vp.isEditable = false">
+                                                                    <mat-icon>cancel</mat-icon>
+                                                                </a>
+                                                            </td>
+
+                                                        </ng-template>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -196,7 +249,8 @@
                         </div>
 
                         <div class="container mt-5">
-                            <h1 style="font-weight: bold; color: #9e1313; font-size: large; margin-left: 2%">Ventas del día</h1>
+                            <h1 style="font-weight: bold; color: #9e1313; font-size: large; margin-left: 2%">Ventas del
+                                día</h1>
                             <div class="d-flex justify-content-center row">
                                 <div class="col-md-12">
                                     <div class="rounded">
